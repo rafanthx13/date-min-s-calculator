@@ -25,9 +25,19 @@ function cast_seconds_to_minutes_time(str){
   return minutes + 'min' + seconds + 's'
 }
 
-  let regex_exp = /\d\dmin\d\ds/gm
+  let regex_exp  = /\d{1,2}min\d\ds/gm
+  let regex_exp2 = /\d{1,2}h\d{1,2}min\d\ds/gm
+  let regex_exp3 = /\d{1,2}h\d{1,2}min/gm
 
+/*
+Presa ter 2 chars antse do min e 2 chars antes do s
+3min40s
+3min50s
+4min20s
+3min40s
+3min20s
 
+*/
 
 
   $("#submit").click(function(){
@@ -38,10 +48,24 @@ function cast_seconds_to_minutes_time(str){
     let values = text_area.match(regex_exp)
     console.log(values)
 
+    if(values === null){
+      values = text_area.match(regex_exp2)
+      console.log(values)
+    }
+
+    if(values === null){
+      console.log('re', values)
+      values = text_area.match(regex_exp3)
+    console.log('saida', values)
+      values = values.map(el => {
+       return el + '00s'
+      })
+    }
+
     let values_int = values.map(el => {
      return cast_minutes_time_to_seconds(el)
     })
-    console.log(values_int)
+    console.log('xxx', values_int)
 
     let max_val = Math.max(... values_int)
     let min_val = Math.min(... values_int)
@@ -51,7 +75,7 @@ function cast_seconds_to_minutes_time(str){
 
     $('#max').text(cast_seconds_to_minutes_time(max_val))
     $('#min').text(cast_seconds_to_minutes_time(min_val))
-    $('#len').text(cast_seconds_to_minutes_time(len_val))
+    $('#len').text(len_val)
     $('#sum').text(cast_seconds_to_minutes_time(sum_val))
     $('#avg').text(cast_seconds_to_minutes_time(avg_val))
 
